@@ -3,7 +3,7 @@
 ### ✅ Introdução a Banco de Dados Relacionais (SQL).
 
 ### <img src="https://gifs.eco.br/wp-content/uploads/2021/06/gifs-de-coracao-7.gif" width="30px"> Comandos: CREATE TABLE, INSERT, SELECT, WHERE, UPDATE, DELETE.
-```
+```sql
 CREATE TABLE usuarios (
   id INT,
   nome VARCHAR(255) NOT NULL COMMENT 'Nome do usuário',
