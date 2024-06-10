@@ -182,6 +182,72 @@ ADD CONSTRAINT fk_reservas_usuarios
 FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 ON DELETE CASCADE;
 ```
+### <img src="https://gifs.eco.br/wp-content/uploads/2021/06/gifs-de-coracao-7.gif" width="30px"> Adicionar colunas de endereço à tabela "Usuarios".
+```sql
+-- Adicionar colunas de endereço à tabela "Usuarios"
+ALTER TABLE Usuarios
+ADD rua VARCHAR(100),
+ADD numero VARCHAR(10),
+ADD cidade VARCHAR(50),
+ADD estado VARCHAR(50);
+
+-- Copia os dados da tabela original para a nova tabela
+UPDATE usuarios
+SET rua = SUBSTRING_INDEX(SUBSTRING_INDEX(endereco, ',', 1), ',', -1),
+    numero = SUBSTRING_INDEX(SUBSTRING_INDEX(endereco, ',', 2), ',', -1),
+    cidade = SUBSTRING_INDEX(SUBSTRING_INDEX(endereco, ',', 3), ',', -1),
+    estado = SUBSTRING_INDEX(endereco, ',', -1);
+
+-- Exclusão da coluna "endereco" da tabela original
+ALTER TABLE usuarios
+DROP COLUMN endereco;
+```
+### <img src="https://gifs.eco.br/wp-content/uploads/2021/06/gifs-de-coracao-7.gif" width="30px"> Comandos: INNER JOIN, RIGHT JOIN, LEFT JOIN, ORDER BY, NOT IN, COUNT.
+```sql
+INSERT INTO usuarios (nome, email, data_nascimento, rua, numero, cidade, estado) VALUES ('Usuario sem reservas', 'semreservar@teste.com', '1990-10-10', 'Rua','123','cidade','estado');
+
+-- Traz apenas os usuario com reservas
+SELECT * FROM usuarios us
+INNER JOIN reservas rs
+	ON us.id = rs.id_usuario;
+
+-- Traz todos os usuario e suas reservas se tiver
+SELECT * FROM usuarios us
+INNER JOIN reservas rs
+	ON us.id = rs.id_usuario;
+
+INSERT INTO viagens.destinos ( nome, descricao) VALUES 
+('Deestino sem reserva', 'Uma bela praia com areias brancas e mar cristalino')
+
+-- Tras todos os destinos e as reservas se tiverem -- 
+SELECT * FROM reservas rs
+RIGHT JOIN destinos des
+	ON des.id = rs.id_destino;
+
+-- Produz o mesmo resultado que a anterior
+SELECT * FROM destinos des
+LEFT JOIN reservas rs
+	ON des.id = rs.id_destino;
+
+-- SUb consultas
+
+-- Usuários que não fizeram nenhuma reserva
+SELECT nome
+FROM usuarios
+WHERE id NOT IN (SELECT id_usuario FROM reservas);
+
+-- Subconsulta para encontrar os destinos menos populares (com menos reservas):
+
+SELECT nome
+FROM destinos
+WHERE id NOT IN (SELECT id_destino FROM reservas)
+ORDER BY id;
+
+-- contagem de reservas por usuario
+
+SELECT nome, (SELECT COUNT(*) FROM reservas WHERE id_usuario = usuarios.id) AS total_reservas
+FROM usuarios;
+```
 <h3 align="center"> Made with <img src="https://gifs.eco.br/wp-content/uploads/2021/06/gifs-de-coracao-7.gif" width="30px"> by Dalila...</h3>
 <div align="center"  style="display: inline-block">
   <a href="https://www.linkedin.com/in/dalila-cust%C3%B3dio-046076181/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
