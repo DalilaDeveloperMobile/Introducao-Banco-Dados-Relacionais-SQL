@@ -248,6 +248,48 @@ ORDER BY id;
 SELECT nome, (SELECT COUNT(*) FROM reservas WHERE id_usuario = usuarios.id) AS total_reservas
 FROM usuarios;
 ```
+### <img src="https://gifs.eco.br/wp-content/uploads/2021/06/gifs-de-coracao-7.gif" width="30px"> Comandos: COUNT, AVG, SUM, MIN, MAX, ORDER BY.
+```sql
+SELECT COUNT(*) FROM usuarios;
+
+-- Media da idade dos usuarios
+SELECT AVG(TIMESTAMPDIFF(YEAR, data_nascimento, CURRENT_DATE())) AS idade
+FROM usuarios;
+
+-- Soma da idade dos usuarios
+SELECT SUM(TIMESTAMPDIFF(YEAR, data_nascimento, CURRENT_DATE())) AS media_idade
+FROM usuarios;
+
+-- Menor Idade
+SELECT MIN(TIMESTAMPDIFF(YEAR, data_nascimento, CURRENT_DATE())) AS media_idade
+FROM usuarios;
+
+-- Maior Idade
+SELECT MAX(TIMESTAMPDIFF(YEAR, data_nascimento, CURRENT_DATE())) AS media_idade
+FROM usuarios;
+
+-- Calcula quantidade de reservas por destino --
+SELECT *, COUNT(*) AS total_reservas FROM reservas GROUP BY id_destino ;
+
+
+-- Limit
+SELECT *, COUNT(*) AS total_reservas FROM reservas GROUP BY id_destino LIMIT 1 OFFSET 2;
+
+SELECT *, COUNT(*) AS total_reservas FROM reservas GROUP BY id_destino LIMIT 1;
+
+-- Ordenação
+SELECT nome
+FROM usuarios
+ORDER BY nome;
+
+SELECT nome, data_nascimento
+FROM usuarios
+ORDER BY data_nascimento, nome;
+
+SELECT nome, data_nascimento
+FROM usuarios
+ORDER BY data_nascimento, nome DESC;
+```
 <h3 align="center"> Made with <img src="https://gifs.eco.br/wp-content/uploads/2021/06/gifs-de-coracao-7.gif" width="30px"> by Dalila...</h3>
 <div align="center"  style="display: inline-block">
   <a href="https://www.linkedin.com/in/dalila-cust%C3%B3dio-046076181/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
